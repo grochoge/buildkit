@@ -137,6 +137,7 @@ COPY --link --from=buildctl /usr/bin/buildctl /
 
 FROM scratch AS binaries-windows
 COPY --link --from=buildctl /usr/bin/buildctl /buildctl.exe
+COPY --link --from=buildkitd /usr/bin/buildkitd /buildkitd.exe
 
 FROM scratch AS binaries-freebsd
 COPY --link --from=buildkitd /usr/bin/buildkitd /
@@ -258,10 +259,6 @@ FROM binaries AS buildkit-darwin
 
 FROM binaries AS buildkit-freebsd
 ENTRYPOINT ["/buildkitd"]
-
-FROM binaries AS buildkit-windows
-# this is not in binaries-windows because it is not intended for release yet, just CI
-COPY --link --from=buildkitd /usr/bin/buildkitd /buildkitd.exe
 
 # dnsname source
 FROM git AS dnsname-src
